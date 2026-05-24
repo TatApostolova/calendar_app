@@ -3,9 +3,11 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Family Calendar - Keep everyone in sync',
-  description: 'A simple, beautiful family calendar to coordinate schedules, track attendance, and keep everyone on the same page.',
+  title: 'Chicken Calendar - Keep the flock coordinated',
+  applicationName: 'Chicken Calendar',
+  description: 'Chicken Calendar keeps busy families, chaotic schedules, and the whole flock coordinated.',
   generator: 'v0.app',
+  manifest: '/manifest.webmanifest',
   icons: {
     icon: [
       {
@@ -22,6 +24,11 @@ export const metadata: Metadata = {
       },
     ],
     apple: '/apple-icon.png',
+  },
+  appleWebApp: {
+    title: 'Chicken Calendar',
+    capable: true,
+    statusBarStyle: 'default',
   },
 }
 
