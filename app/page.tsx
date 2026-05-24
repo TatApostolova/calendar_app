@@ -40,7 +40,7 @@ export default async function HomePage() {
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-yolk shadow-yolk">
                 <Calendar className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="font-display text-xl font-bold">Family Calendar</span>
+              <span className="font-display text-xl font-bold">Chicken Calendar</span>
             </div>
             <div className="flex items-center gap-3">
               {isFirstTimeSetup ? (
