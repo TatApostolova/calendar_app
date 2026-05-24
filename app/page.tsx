@@ -45,7 +45,7 @@ export default async function HomePage() {
             <div className="flex items-center gap-3">
               {isFirstTimeSetup ? (
                 <Button asChild className="rounded-full bg-yolk px-5 font-extrabold text-primary-foreground shadow-yolk hover:brightness-105">
-                  <Link href="/auth/sign-up">Set up your calendar</Link>
+                  <Link href="/auth/sign-up">Round up the flock</Link>
                 </Button>
               ) : (
                 <Button asChild className="rounded-full bg-yolk px-5 font-extrabold text-primary-foreground shadow-yolk hover:brightness-105">
@@ -68,17 +68,16 @@ export default async function HomePage() {
               Welcome to the coop
             </p>
             <h1 className="font-display text-5xl font-extrabold tracking-normal text-balance md:text-7xl">
-              Keep your family in sync
+              Herding humans is hard
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg font-semibold text-muted-foreground md:text-xl">
-              A simple, beautiful calendar for families. Create events, track who&apos;s going, 
-              and never miss an important moment together.
+              Built for busy families, chaotic schedules, and &lsquo;wait, who&rsquo;s taking her?&rsquo;
             </p>
             <div className="mt-10">
               {isFirstTimeSetup ? (
                 <Button size="lg" asChild className="rounded-full bg-yolk px-8 py-6 font-display text-base font-extrabold text-primary-foreground shadow-yolk hover:brightness-105">
                   <Link href="/auth/sign-up">
-                    Set up your calendar
+                    Round up the flock
                   </Link>
                 </Button>
               ) : (
@@ -101,27 +100,27 @@ export default async function HomePage() {
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
                 <Users className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="mb-2 font-display text-xl font-bold">For the whole family</h3>
+              <h3 className="mb-2 font-display text-xl font-bold">The whole flock</h3>
               <p className="font-semibold text-muted-foreground">
-                Each family member gets their own color. See at a glance who needs to be where.
+                Everyone gets their own colour so you can instantly see who&rsquo;s flying where.
               </p>
             </div>
             <div className="rounded-[1.5rem] border-2 bg-card p-6 text-center shadow-sm">
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
                 <CheckCircle className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="mb-2 font-display text-xl font-bold">Track attendance</h3>
+              <h3 className="mb-2 font-display text-xl font-bold">No more &lsquo;I thought you knew&rsquo;</h3>
               <p className="font-semibold text-muted-foreground">
-                Everyone can confirm if they&apos;re going and add notes. No more group chat chaos.
+                Track who&rsquo;s coming, who&rsquo;s driving, and who forgot to mention the schedule changed.
               </p>
             </div>
             <div className="rounded-[1.5rem] border-2 bg-card p-6 text-center shadow-sm">
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
                 <Bell className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="mb-2 font-display text-xl font-bold">Real-time updates</h3>
+              <h3 className="mb-2 font-display text-xl font-bold">Updates fly fast</h3>
               <p className="font-semibold text-muted-foreground">
-                Changes sync instantly across all devices. Always stay up to date.
+                Keep the flock coordinated, even when plans go sideways.
               </p>
             </div>
           </div>
