@@ -17,6 +17,7 @@ import {
   parseISO,
 } from 'date-fns'
 import { cn } from '@/lib/utils'
+import { ChickenMascot, EggIcon, FeedSpecks } from './chicken-visuals'
 
 interface CalendarViewProps {
   events: EventWithAttendees[]
@@ -51,36 +52,44 @@ export function CalendarView({
   }
 
   return (
-    <Card>
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-semibold">
+    <Card className="overflow-hidden rounded-[1.75rem] border-2 bg-card shadow-sm">
+      <CardHeader className="relative overflow-hidden bg-secondary/70 px-4 pb-4 pt-5 sm:px-6">
+        <FeedSpecks className="absolute right-20 top-2 hidden opacity-70 sm:block" />
+        <ChickenMascot size={72} className="absolute -right-2 -top-1 hidden rotate-6 sm:block" />
+        <div className="relative flex items-center justify-between">
+          <div>
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-muted-foreground">
+              The flock calendar
+            </p>
+            <CardTitle className="font-display text-3xl font-bold tracking-normal">
             {format(currentMonth, 'MMMM yyyy')}
-          </CardTitle>
-          <div className="flex items-center gap-1">
-            <Button variant="outline" size="icon" onClick={onPrevMonth}>
+            </CardTitle>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Button variant="outline" size="icon" onClick={onPrevMonth} className="rounded-full border-2 bg-card">
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => onSelectDate(new Date())}
+              className="rounded-full border-2 bg-card px-4 font-extrabold"
             >
               Today
             </Button>
-            <Button variant="outline" size="icon" onClick={onNextMonth}>
+            <Button variant="outline" size="icon" onClick={onNextMonth} className="rounded-full border-2 bg-card">
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-3 py-4 sm:px-5 sm:py-5">
         {/* Day names */}
-        <div className="grid grid-cols-7 mb-2">
+        <div className="mb-2 grid grid-cols-7">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
             <div
               key={day}
-              className="text-center text-sm font-medium text-muted-foreground py-2"
+              className="py-2 text-center text-[11px] font-extrabold uppercase tracking-[0.12em] text-muted-foreground"
             >
               {day}
             </div>
@@ -88,7 +97,7 @@ export function CalendarView({
         </div>
 
         {/* Calendar grid */}
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-1.5">
           {days.map((day) => {
             const dayEvents = getEventsForDay(day)
             const isCurrentMonth = isSameMonth(day, currentMonth)
@@ -100,25 +109,30 @@ export function CalendarView({
                 key={day.toISOString()}
                 onClick={() => onSelectDate(day)}
                 className={cn(
-                  'relative aspect-square p-1 rounded-lg transition-colors',
+                  'relative flex aspect-[0.92] flex-col items-center rounded-2xl p-1.5 transition-colors',
                   'hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring',
                   !isCurrentMonth && 'text-muted-foreground/50',
-                  isSelected && 'bg-primary text-primary-foreground hover:bg-primary',
-                  isDayToday && !isSelected && 'ring-2 ring-primary'
+                  isSelected && 'bg-card text-foreground shadow-[inset_0_0_0_2px_#2b1810] hover:bg-card',
+                  isDayToday && 'bg-yolk text-primary-foreground shadow-yolk hover:brightness-105'
                 )}
               >
                 <span
                   className={cn(
-                    'text-sm font-medium',
+                    'font-display text-base font-bold leading-none',
                     isSelected && 'text-primary-foreground'
                   )}
                 >
                   {format(day, 'd')}
                 </span>
+                {isDayToday && (
+                  <span className="mt-0.5 text-[8px] font-extrabold uppercase tracking-wide">
+                    Today
+                  </span>
+                )}
                 
                 {/* Event dots */}
                 {dayEvents.length > 0 && (
-                  <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-0.5">
+                  <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-0.5">
                     {dayEvents.slice(0, 3).map((event) => {
                       // Get the first attendee's color or default
                       const firstAttendee = event.event_attendees[0]?.family_member
@@ -135,11 +149,14 @@ export function CalendarView({
                       )
                     })}
                     {dayEvents.length > 3 && (
-                      <span className="text-[10px] text-muted-foreground">
+                      <span className="text-[10px] font-extrabold text-muted-foreground">
                         +{dayEvents.length - 3}
                       </span>
                     )}
                   </div>
+                )}
+                {isSelected && dayEvents.length === 0 && (
+                  <EggIcon size={16} className="absolute bottom-1.5 left-1/2 -translate-x-1/2 opacity-80" />
                 )}
               </button>
             )

@@ -15,6 +15,7 @@ import { Calendar, Plus, LogOut, Users, Filter } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { ChickenMascot } from './chicken-visuals'
 
 interface HeaderProps {
   family: Family
@@ -55,23 +56,29 @@ export function Header({
     : null
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-sm">
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-50 border-b border-border/80 bg-background/92 backdrop-blur-md">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="flex h-20 items-center justify-between gap-4">
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Calendar className="h-5 w-5 text-primary-foreground" />
+          <Link href="/dashboard" className="flex min-w-0 items-center gap-3">
+            <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-yolk shadow-yolk">
+              <Calendar className="absolute h-5 w-5 translate-x-1 translate-y-1 text-primary-foreground/35" />
+              <ChickenMascot size={46} className="-translate-x-0.5 -translate-y-0.5" />
             </div>
-            <span className="font-semibold text-lg hidden sm:inline">{family.name}</span>
+            <div className="hidden min-w-0 sm:block">
+              <span className="block text-[11px] font-extrabold uppercase tracking-[0.18em] text-muted-foreground">
+                The Coop
+              </span>
+              <span className="block truncate font-display text-xl font-bold leading-tight">{family.name}</span>
+            </div>
           </Link>
 
           {/* Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:gap-3">
             {/* Filter */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-2">
+                <Button variant="outline" size="sm" className="gap-2 rounded-full border-2 bg-card px-3 font-bold shadow-sm hover:bg-secondary">
                   <Filter className="h-4 w-4" />
                   <span className="hidden sm:inline">
                     {filterMember ? filterMember.name : 'All events'}
@@ -108,7 +115,7 @@ export function Header({
             </DropdownMenu>
 
             {/* Create Event */}
-            <Button onClick={onCreateEvent} size="sm" className="gap-2">
+            <Button onClick={onCreateEvent} size="sm" className="gap-2 rounded-full bg-yolk px-4 font-extrabold text-primary-foreground shadow-yolk hover:brightness-105">
               <Plus className="h-4 w-4" />
               <span className="hidden sm:inline">New Event</span>
             </Button>
@@ -116,11 +123,11 @@ export function Header({
             {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Avatar className="h-8 w-8">
+                <Button variant="ghost" size="icon" className="rounded-full bg-card shadow-sm hover:bg-secondary">
+                  <Avatar className="h-9 w-9">
                     <AvatarFallback
                       style={{ backgroundColor: currentMember.color }}
-                      className="text-white text-xs"
+                      className="text-xs font-extrabold text-white"
                     >
                       {getInitials(currentMember.name)}
                     </AvatarFallback>

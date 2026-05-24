@@ -31,24 +31,24 @@ export default async function HomePage() {
   const isFirstTimeSetup = count === 0
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="sticky top-0 z-50 border-b border-border/80 bg-background/92 backdrop-blur-md">
         <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
+          <div className="flex h-20 items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-yolk shadow-yolk">
                 <Calendar className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="font-semibold text-lg">Family Calendar</span>
+              <span className="font-display text-xl font-bold">Family Calendar</span>
             </div>
             <div className="flex items-center gap-3">
               {isFirstTimeSetup ? (
-                <Button asChild>
+                <Button asChild className="rounded-full bg-yolk px-5 font-extrabold text-primary-foreground shadow-yolk hover:brightness-105">
                   <Link href="/auth/sign-up">Set up your calendar</Link>
                 </Button>
               ) : (
-                <Button asChild>
+                <Button asChild className="rounded-full bg-yolk px-5 font-extrabold text-primary-foreground shadow-yolk hover:brightness-105">
                   <Link href="/auth/login">Sign in</Link>
                 </Button>
               )}
@@ -58,25 +58,31 @@ export default async function HomePage() {
       </header>
 
       {/* Hero */}
-      <section className="py-20 md:py-32">
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 max-w-6xl">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-balance">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mx-auto mb-8 flex h-28 w-28 items-center justify-center rounded-full bg-yolk shadow-yolk">
+              <Calendar className="h-12 w-12 text-primary-foreground" />
+            </div>
+            <p className="mb-3 text-[12px] font-extrabold uppercase tracking-[0.2em] text-destructive">
+              Welcome to the coop
+            </p>
+            <h1 className="font-display text-5xl font-extrabold tracking-normal text-balance md:text-7xl">
               Keep your family in sync
             </h1>
-            <p className="mt-6 text-lg md:text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
+            <p className="mx-auto mt-6 max-w-2xl text-pretty text-lg font-semibold text-muted-foreground md:text-xl">
               A simple, beautiful calendar for families. Create events, track who&apos;s going, 
               and never miss an important moment together.
             </p>
             <div className="mt-10">
               {isFirstTimeSetup ? (
-                <Button size="lg" asChild>
+                <Button size="lg" asChild className="rounded-full bg-yolk px-8 py-6 font-display text-base font-extrabold text-primary-foreground shadow-yolk hover:brightness-105">
                   <Link href="/auth/sign-up">
                     Set up your calendar
                   </Link>
                 </Button>
               ) : (
-                <Button size="lg" asChild>
+                <Button size="lg" asChild className="rounded-full bg-yolk px-8 py-6 font-display text-base font-extrabold text-primary-foreground shadow-yolk hover:brightness-105">
                   <Link href="/auth/login">
                     Sign in to your calendar
                   </Link>
@@ -88,33 +94,33 @@ export default async function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="py-20 bg-muted/50">
+      <section className="bg-secondary/70 py-16">
         <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-6">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+          <div className="grid gap-5 md:grid-cols-3">
+            <div className="rounded-[1.5rem] border-2 bg-card p-6 text-center shadow-sm">
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
                 <Users className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-semibold text-lg mb-2">For the whole family</h3>
-              <p className="text-muted-foreground">
+              <h3 className="mb-2 font-display text-xl font-bold">For the whole family</h3>
+              <p className="font-semibold text-muted-foreground">
                 Each family member gets their own color. See at a glance who needs to be where.
               </p>
             </div>
-            <div className="text-center p-6">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+            <div className="rounded-[1.5rem] border-2 bg-card p-6 text-center shadow-sm">
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
                 <CheckCircle className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-semibold text-lg mb-2">Track attendance</h3>
-              <p className="text-muted-foreground">
+              <h3 className="mb-2 font-display text-xl font-bold">Track attendance</h3>
+              <p className="font-semibold text-muted-foreground">
                 Everyone can confirm if they&apos;re going and add notes. No more group chat chaos.
               </p>
             </div>
-            <div className="text-center p-6">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+            <div className="rounded-[1.5rem] border-2 bg-card p-6 text-center shadow-sm">
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
                 <Bell className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="font-semibold text-lg mb-2">Real-time updates</h3>
-              <p className="text-muted-foreground">
+              <h3 className="mb-2 font-display text-xl font-bold">Real-time updates</h3>
+              <p className="font-semibold text-muted-foreground">
                 Changes sync instantly across all devices. Always stay up to date.
               </p>
             </div>
@@ -123,16 +129,16 @@ export default async function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t py-8">
+      <footer className="border-t border-border/80 py-8">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-yolk">
                 <Calendar className="h-4 w-4 text-primary-foreground" />
               </div>
-              <span className="font-medium text-sm">Family Calendar</span>
+              <span className="font-display text-sm font-bold">Family Calendar</span>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm font-semibold text-muted-foreground">
               Made with care for families everywhere
             </p>
           </div>

@@ -131,7 +131,7 @@ export function DashboardContent({ family, currentMember, familyMembers }: Dashb
     : events
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background text-foreground">
       <Header
         family={family}
         currentMember={currentMember}
@@ -141,8 +141,8 @@ export function DashboardContent({ family, currentMember, familyMembers }: Dashb
         onCreateEvent={handleCreateEvent}
       />
       
-      <main className="container mx-auto px-4 py-6 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <main className="container mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:py-8">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3 lg:gap-6">
           <div className="lg:col-span-2">
             <CalendarView
               events={filteredEvents}
