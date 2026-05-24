@@ -135,10 +135,10 @@ export default async function HomePage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-yolk">
                 <Calendar className="h-4 w-4 text-primary-foreground" />
               </div>
-              <span className="font-display text-sm font-bold">Family Calendar</span>
+              <span className="font-display text-sm font-bold">Chicken Calendar</span>
             </div>
             <p className="text-sm font-semibold text-muted-foreground">
-              Made with care for families everywhere
+              Made for flocks on the fly
             </p>
           </div>
         </div>
