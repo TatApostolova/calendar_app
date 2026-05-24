@@ -457,7 +457,6 @@ export function EventModal({
                             </p>
                           )}
                         </div>
-                      </div>
                     ))}
                   </div>
                 </div>
