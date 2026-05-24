@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,14 @@ import { Calendar, Loader2 } from 'lucide-react'
 import type { Invitation, Family } from '@/lib/types'
 
 export default function AcceptInvitePage() {
+  return (
+    <Suspense fallback={<InviteLoading />}>
+      <AcceptInviteContent />
+    </Suspense>
+  )
+}
+
+function AcceptInviteContent() {
   const [invitation, setInvitation] = useState<(Invitation & { families: Family }) | null>(null)
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -121,11 +129,7 @@ export default function AcceptInvitePage() {
   }
 
   if (isLoading) {
-    return (
-      <main className="min-h-screen flex items-center justify-center p-4">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </main>
-    )
+    return <InviteLoading />
   }
 
   if (error && !invitation) {
@@ -199,6 +203,14 @@ export default function AcceptInvitePage() {
           </form>
         </CardContent>
       </Card>
+    </main>
+  )
+}
+
+function InviteLoading() {
+  return (
+    <main className="min-h-screen flex items-center justify-center p-4">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
     </main>
   )
 }
