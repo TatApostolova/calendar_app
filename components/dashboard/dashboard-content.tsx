@@ -30,8 +30,8 @@ export function DashboardContent({ family, currentMember, familyMembers }: Dashb
     setIsLoading(true)
     
     // Get date range for the current month view (including overflow days)
-    const monthStart = startOfWeek(startOfMonth(currentMonth))
-    const monthEnd = endOfWeek(endOfMonth(currentMonth))
+    const monthStart = startOfWeek(startOfMonth(currentMonth), { weekStartsOn: 1 })
+    const monthEnd = endOfWeek(endOfMonth(currentMonth), { weekStartsOn: 1 })
 
     const { data, error } = await supabase
       .from('events')

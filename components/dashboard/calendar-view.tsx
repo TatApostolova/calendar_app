@@ -40,8 +40,8 @@ export function CalendarView({
 }: CalendarViewProps) {
   const monthStart = startOfMonth(currentMonth)
   const monthEnd = endOfMonth(currentMonth)
-  const calendarStart = startOfWeek(monthStart)
-  const calendarEnd = endOfWeek(monthEnd)
+  const calendarStart = startOfWeek(monthStart, { weekStartsOn: 1 })
+  const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 1 })
   const days = eachDayOfInterval({ start: calendarStart, end: calendarEnd })
 
   const getEventsForDay = (day: Date) => {
@@ -86,7 +86,7 @@ export function CalendarView({
       <CardContent className="px-3 py-4 sm:px-5 sm:py-5">
         {/* Day names */}
         <div className="mb-2 grid grid-cols-7">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
             <div
               key={day}
               className="py-2 text-center text-[11px] font-extrabold uppercase tracking-[0.12em] text-muted-foreground"
