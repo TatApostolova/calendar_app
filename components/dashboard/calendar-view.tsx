@@ -130,33 +130,37 @@ export function CalendarView({
                   </span>
                 )}
                 
-                {/* Event dots */}
-                {dayEvents.length > 0 && (
-                  <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-0.5">
-                    {dayEvents.slice(0, 3).map((event) => {
-                      // Get the first attendee who is going or pending (exclude declined)
-                      const activeAttendee = event.event_attendees.find(
-                        (a) => a.status !== 'not_going'
-                      )?.family_member
-                      const color = activeAttendee?.color || '#3B82F6'
-                      return (
+                {/* Event dots - show one dot per active attendee (going or pending) */}
+                {dayEvents.length > 0 && (() => {
+                  // Collect all active attendees across all events for this day
+                  const activeAttendees = dayEvents.flatMap((event) =>
+                    event.event_attendees
+                      .filter((a) => a.status === 'going' || a.status === 'pending')
+                      .map((a) => ({ eventId: event.id, attendee: a }))
+                  )
+                  
+                  if (activeAttendees.length === 0) return null
+                  
+                  return (
+                    <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-0.5">
+                      {activeAttendees.slice(0, 4).map(({ eventId, attendee }) => (
                         <span
-                          key={event.id}
+                          key={`${eventId}-${attendee.id}`}
                           className={cn(
                             'h-1.5 w-1.5 rounded-full',
                             isSelected && 'ring-1 ring-primary-foreground'
                           )}
-                          style={{ backgroundColor: color }}
+                          style={{ backgroundColor: attendee.family_member.color }}
                         />
-                      )
-                    })}
-                    {dayEvents.length > 3 && (
-                      <span className="text-[10px] font-extrabold text-muted-foreground">
-                        +{dayEvents.length - 3}
-                      </span>
-                    )}
-                  </div>
-                )}
+                      ))}
+                      {activeAttendees.length > 4 && (
+                        <span className="text-[10px] font-extrabold text-muted-foreground">
+                          +{activeAttendees.length - 4}
+                        </span>
+                      )}
+                    </div>
+                  )
+                })()}
                 {isSelected && dayEvents.length === 0 && (
                   <EggIcon size={16} className="absolute bottom-1.5 left-1/2 -translate-x-1/2 opacity-80" />
                 )}
