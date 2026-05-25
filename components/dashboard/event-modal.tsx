@@ -52,6 +52,7 @@ export function EventModal({
   const [attendeeIds, setAttendeeIds] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('details')
+  const [localNote, setLocalNote] = useState('')
 
   const supabase = createClient()
   const isEditing = !!event
@@ -66,6 +67,8 @@ export function EventModal({
       setEndTime(format(parseISO(event.end_time), 'HH:mm'))
       setAllDay(event.all_day)
       setAttendeeIds(event.event_attendees.map((a) => a.member_id))
+      const myAtt = event.event_attendees.find((a) => a.member_id === currentMember.id)
+      setLocalNote(myAtt?.note || '')
     } else {
       setTitle('')
       setDescription('')
@@ -75,6 +78,7 @@ export function EventModal({
       setEndTime('10:00')
       setAllDay(false)
       setAttendeeIds([currentMember.id])
+      setLocalNote('')
     }
     setActiveTab('details')
   }, [event, selectedDate, currentMember.id])
@@ -214,6 +218,8 @@ export function EventModal({
 
   const handleNoteChange = async (note: string) => {
     if (!event) return
+
+    setLocalNote(note)
 
     const myAttendance = event.event_attendees.find(
       (a) => a.member_id === currentMember.id
@@ -411,7 +417,7 @@ export function EventModal({
                         Add a note
                       </Label>
                       <Textarea
-                        value={myAttendance.note || ''}
+                        value={localNote}
                         onChange={(e) => handleNoteChange(e.target.value)}
                         placeholder="e.g., I'll bring snacks!"
                         rows={2}
