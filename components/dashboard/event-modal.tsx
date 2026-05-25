@@ -359,25 +359,26 @@ export function EventModal({
             <div className="space-y-2">
               <Label className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-muted-foreground">Who's coming?</Label>
               <div className="space-y-2 rounded-3xl border-2 bg-card p-3">
-                {familyMembers.map((member) => (
+                {familyMembers
+                  .filter((member) => {
+                    // When editing, hide members who responded "not going"
+                    if (isEditing && event) {
+                      // Check localStatus for current user's immediate update
+                      if (member.id === currentMember.id) {
+                        return localStatus !== 'not_going'
+                      }
+                      const attendance = event.event_attendees.find((a) => a.member_id === member.id)
+                      if (attendance?.status === 'not_going') {
+                        return false
+                      }
+                    }
+                    return true
+                  })
+                  .map((member) => (
                   <div key={member.id} className="flex items-center space-x-3 rounded-2xl bg-secondary px-3 py-2">
                     <Checkbox
                       id={`member-${member.id}`}
-                      checked={(() => {
-                        if (!attendeeIds.includes(member.id)) return false
-                        // When editing, uncheck if member responded "not going"
-                        if (isEditing && event) {
-                          // Check localStatus for current user's immediate update
-                          if (member.id === currentMember.id && localStatus === 'not_going') {
-                            return false
-                          }
-                          const attendance = event.event_attendees.find((a) => a.member_id === member.id)
-                          if (attendance?.status === 'not_going') {
-                            return false
-                          }
-                        }
-                        return true
-                      })()}
+                      checked={attendeeIds.includes(member.id)}
                       onCheckedChange={(checked) => {
                         if (checked) {
                           setAttendeeIds([...attendeeIds, member.id])
