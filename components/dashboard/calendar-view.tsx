@@ -134,9 +134,11 @@ export function CalendarView({
                 {dayEvents.length > 0 && (
                   <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-0.5">
                     {dayEvents.slice(0, 3).map((event) => {
-                      // Get the first attendee's color or default
-                      const firstAttendee = event.event_attendees[0]?.family_member
-                      const color = firstAttendee?.color || '#3B82F6'
+                      // Get the first attendee who is going or pending (exclude declined)
+                      const activeAttendee = event.event_attendees.find(
+                        (a) => a.status !== 'not_going'
+                      )?.family_member
+                      const color = activeAttendee?.color || '#3B82F6'
                       return (
                         <span
                           key={event.id}

@@ -108,15 +108,18 @@ export function EventList({
                     'hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring'
                   )}
                 >
-                  {/* Attendee color bar */}
+                  {/* Attendee color bar - only show going or pending attendees */}
                   <div className="flex gap-0.5 mb-2">
-                    {event.event_attendees.slice(0, 5).map((attendee) => (
-                      <span
-                        key={attendee.id}
-                        className="h-1.5 flex-1 rounded-full"
-                        style={{ backgroundColor: attendee.family_member.color }}
-                      />
-                    ))}
+                    {event.event_attendees
+                      .filter((a) => a.status !== 'not_going')
+                      .slice(0, 5)
+                      .map((attendee) => (
+                        <span
+                          key={attendee.id}
+                          className="h-1.5 flex-1 rounded-full"
+                          style={{ backgroundColor: attendee.family_member.color }}
+                        />
+                      ))}
                   </div>
 
                   <div className="flex items-start gap-3">
@@ -151,21 +154,24 @@ export function EventList({
                     </div>
                   </div>
 
-                  {/* Attendees */}
+                  {/* Attendees - only show going or pending attendees */}
                   <div className="mt-3 flex items-center gap-1">
-                    {event.event_attendees.slice(0, 4).map((attendee) => (
-                      <span
-                        key={attendee.id}
-                        className="flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-extrabold text-white ring-2 ring-card"
-                        style={{ backgroundColor: attendee.family_member.color }}
-                        title={attendee.family_member.name}
-                      >
-                        {attendee.family_member.name.charAt(0).toUpperCase()}
-                      </span>
-                    ))}
-                    {event.event_attendees.length > 4 && (
+                    {event.event_attendees
+                      .filter((a) => a.status !== 'not_going')
+                      .slice(0, 4)
+                      .map((attendee) => (
+                        <span
+                          key={attendee.id}
+                          className="flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-extrabold text-white ring-2 ring-card"
+                          style={{ backgroundColor: attendee.family_member.color }}
+                          title={attendee.family_member.name}
+                        >
+                          {attendee.family_member.name.charAt(0).toUpperCase()}
+                        </span>
+                      ))}
+                    {event.event_attendees.filter((a) => a.status !== 'not_going').length > 4 && (
                       <span className="text-xs text-muted-foreground">
-                        +{event.event_attendees.length - 4}
+                        +{event.event_attendees.filter((a) => a.status !== 'not_going').length - 4}
                       </span>
                     )}
                   </div>
