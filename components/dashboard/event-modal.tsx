@@ -53,6 +53,7 @@ export function EventModal({
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('details')
   const [localNote, setLocalNote] = useState('')
+  const [localStatus, setLocalStatus] = useState<'pending' | 'going' | 'not_going'>('pending')
 
   const supabase = createClient()
   const isEditing = !!event
@@ -69,6 +70,7 @@ export function EventModal({
       setAttendeeIds(event.event_attendees.map((a) => a.member_id))
       const myAtt = event.event_attendees.find((a) => a.member_id === currentMember.id)
       setLocalNote(myAtt?.note || '')
+      setLocalStatus(myAtt?.status || 'pending')
     } else {
       setTitle('')
       setDescription('')
@@ -79,6 +81,7 @@ export function EventModal({
       setAllDay(false)
       setAttendeeIds([currentMember.id])
       setLocalNote('')
+      setLocalStatus('pending')
     }
     setActiveTab('details')
   }, [event, selectedDate, currentMember.id])
@@ -201,6 +204,8 @@ export function EventModal({
 
   const handleStatusChange = async (status: 'going' | 'not_going') => {
     if (!event) return
+
+    setLocalStatus(status)
 
     const myAttendance = event.event_attendees.find(
       (a) => a.member_id === currentMember.id
@@ -354,7 +359,22 @@ export function EventModal({
             <div className="space-y-2">
               <Label className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-muted-foreground">Who's coming?</Label>
               <div className="space-y-2 rounded-3xl border-2 bg-card p-3">
-                {familyMembers.map((member) => (
+                {familyMembers
+                  .filter((member) => {
+                    // When editing, hide members who responded "not going"
+                    if (isEditing && event) {
+                      // Check localStatus for current user's immediate update
+                      if (member.id === currentMember.id) {
+                        return localStatus !== 'not_going'
+                      }
+                      const attendance = event.event_attendees.find((a) => a.member_id === member.id)
+                      if (attendance?.status === 'not_going') {
+                        return false
+                      }
+                    }
+                    return true
+                  })
+                  .map((member) => (
                   <div key={member.id} className="flex items-center space-x-3 rounded-2xl bg-secondary px-3 py-2">
                     <Checkbox
                       id={`member-${member.id}`}
@@ -393,7 +413,7 @@ export function EventModal({
                     <Label className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-muted-foreground">Your response</Label>
                     <div className="flex gap-2">
                       <Button
-                        variant={myAttendance.status === 'going' ? 'default' : 'outline'}
+                        variant={localStatus === 'going' ? 'default' : 'outline'}
                         size="sm"
                         className="gap-2 rounded-full font-extrabold"
                         onClick={() => handleStatusChange('going')}
@@ -402,7 +422,7 @@ export function EventModal({
                         Going
                       </Button>
                       <Button
-                        variant={myAttendance.status === 'not_going' ? 'destructive' : 'outline'}
+                        variant={localStatus === 'not_going' ? 'destructive' : 'outline'}
                         size="sm"
                         className="gap-2 rounded-full font-extrabold"
                         onClick={() => handleStatusChange('not_going')}
