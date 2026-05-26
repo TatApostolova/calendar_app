@@ -65,6 +65,16 @@ export function EventList({
     }
   }
 
+  const getActiveAttendees = (event: EventWithAttendees) => {
+    return Array.from(
+      new Map(
+        event.event_attendees
+          .filter((attendee) => attendee.status !== 'not_going')
+          .map((attendee) => [attendee.member_id, attendee])
+      ).values()
+    )
+  }
+
   return (
     <Card className="h-fit overflow-hidden rounded-[1.75rem] border-2 bg-card shadow-sm">
       <CardHeader className="relative overflow-hidden bg-secondary/70 px-4 pb-3 pt-5">
@@ -99,69 +109,66 @@ export function EventList({
         ) : (
           <ScrollArea className="h-[430px] pr-3">
             <div className="space-y-3 pb-2">
-              {dayEvents.map((event) => (
-                <button
-                  key={event.id}
-                  onClick={() => onEventClick(event)}
-                  className={cn(
-                    'w-full rounded-[1.35rem] border-2 bg-card p-3 text-left transition-colors',
-                    'hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring'
-                  )}
-                >
-                  {/* Attendee color bar - only show going or pending attendees */}
-                  <div className="flex gap-0.5 mb-2">
-                    {event.event_attendees
-                      .filter((a) => a.status !== 'not_going')
-                      .slice(0, 5)
-                      .map((attendee) => (
+              {dayEvents.map((event) => {
+                const activeAttendees = getActiveAttendees(event)
+
+                return (
+                  <button
+                    key={event.id}
+                    onClick={() => onEventClick(event)}
+                    className={cn(
+                      'w-full rounded-[1.35rem] border-2 bg-card p-3 text-left transition-colors',
+                      'hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring'
+                    )}
+                  >
+                    {/* Attendee color bar - only show going or pending attendees */}
+                    <div className="flex gap-0.5 mb-2">
+                      {activeAttendees.slice(0, 5).map((attendee) => (
                         <span
-                          key={attendee.id}
+                          key={attendee.member_id}
                           className="h-1.5 flex-1 rounded-full"
                           style={{ backgroundColor: attendee.family_member.color }}
                         />
                       ))}
-                  </div>
+                    </div>
 
-                  <div className="flex items-start gap-3">
-                    <ActivityBadge event={event} />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-start justify-between gap-2">
-                        <h3 className="font-display text-base font-bold leading-tight">
-                          {event.title}
-                        </h3>
-                        {getStatusBadge(event)}
-                      </div>
+                    <div className="flex items-start gap-3">
+                      <ActivityBadge event={event} />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-2">
+                          <h3 className="font-display text-base font-bold leading-tight">
+                            {event.title}
+                          </h3>
+                          {getStatusBadge(event)}
+                        </div>
 
-                      <div className="mt-2 space-y-1">
-                        <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
-                          <Clock className="h-3 w-3" />
-                          {event.all_day ? (
-                            'All day'
-                          ) : (
-                            <>
-                              {format(parseISO(event.start_time), 'h:mm a')} -{' '}
-                              {format(parseISO(event.end_time), 'h:mm a')}
-                            </>
+                        <div className="mt-2 space-y-1">
+                          <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            {event.all_day ? (
+                              'All day'
+                            ) : (
+                              <>
+                                {format(parseISO(event.start_time), 'h:mm a')} -{' '}
+                                {format(parseISO(event.end_time), 'h:mm a')}
+                              </>
+                            )}
+                          </div>
+                          {event.location && (
+                            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+                              <MapPin className="h-3 w-3" />
+                              {event.location}
+                            </div>
                           )}
                         </div>
-                        {event.location && (
-                          <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
-                            <MapPin className="h-3 w-3" />
-                            {event.location}
-                          </div>
-                        )}
                       </div>
                     </div>
-                  </div>
 
-                  {/* Attendees - only show going or pending attendees */}
-                  <div className="mt-3 flex items-center gap-1">
-                    {event.event_attendees
-                      .filter((a) => a.status !== 'not_going')
-                      .slice(0, 4)
-                      .map((attendee) => (
+                    {/* Attendees - only show going or pending attendees */}
+                    <div className="mt-3 flex items-center gap-1">
+                      {activeAttendees.slice(0, 5).map((attendee) => (
                         <span
-                          key={attendee.id}
+                          key={attendee.member_id}
                           className="flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-extrabold text-white ring-2 ring-card"
                           style={{ backgroundColor: attendee.family_member.color }}
                           title={attendee.family_member.name}
@@ -169,14 +176,15 @@ export function EventList({
                           {attendee.family_member.name.charAt(0).toUpperCase()}
                         </span>
                       ))}
-                    {event.event_attendees.filter((a) => a.status !== 'not_going').length > 4 && (
-                      <span className="text-xs text-muted-foreground">
-                        +{event.event_attendees.filter((a) => a.status !== 'not_going').length - 4}
-                      </span>
-                    )}
-                  </div>
-                </button>
-              ))}
+                      {activeAttendees.length > 5 && (
+                        <span className="text-xs text-muted-foreground">
+                          +{activeAttendees.length - 5}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                )
+              })}
             </div>
           </ScrollArea>
         )}
