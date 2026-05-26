@@ -130,22 +130,22 @@ export function CalendarView({
                   </span>
                 )}
                 
-                {/* Event dots - show one dot per active attendee (going or pending) */}
+                {/* Event dots - show one dot per active family member (going or pending) */}
                 {dayEvents.length > 0 && (() => {
-                  // Collect all active attendees across all events for this day
-                  const activeAttendees = dayEvents.flatMap((event) =>
-                    event.event_attendees
-                      .filter((a) => a.status === 'going' || a.status === 'pending')
-                      .map((a) => ({ eventId: event.id, attendee: a }))
+                  const activeAttendees = dayEvents
+                    .flatMap((event) => event.event_attendees)
+                    .filter((a) => a.status === 'going' || a.status === 'pending')
+                  const uniqueAttendees = Array.from(
+                    new Map(activeAttendees.map((attendee) => [attendee.member_id, attendee])).values()
                   )
                   
-                  if (activeAttendees.length === 0) return null
+                  if (uniqueAttendees.length === 0) return null
                   
                   return (
                     <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-0.5">
-                      {activeAttendees.slice(0, 4).map(({ eventId, attendee }) => (
+                      {uniqueAttendees.slice(0, 5).map((attendee) => (
                         <span
-                          key={`${eventId}-${attendee.id}`}
+                          key={attendee.member_id}
                           className={cn(
                             'h-1.5 w-1.5 rounded-full',
                             isSelected && 'ring-1 ring-primary-foreground'
@@ -153,9 +153,9 @@ export function CalendarView({
                           style={{ backgroundColor: attendee.family_member.color }}
                         />
                       ))}
-                      {activeAttendees.length > 4 && (
+                      {uniqueAttendees.length > 5 && (
                         <span className="text-[10px] font-extrabold text-muted-foreground">
-                          +{activeAttendees.length - 4}
+                          +{uniqueAttendees.length - 5}
                         </span>
                       )}
                     </div>
